@@ -10,6 +10,7 @@ class MyMapComponent extends React.Component{
     render() {
         let from = this.props.from;
         let to = this.props.to;
+        let waypoint = this.props.waypoint;
         const Map = compose(
             withProps({
                 googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyCaK8qoLfQ8WW7M4XGe60O1_LpVrBE6yyk",
@@ -26,6 +27,12 @@ class MyMapComponent extends React.Component{
                         origin: from,
                         destination: to,
                         travelMode: google.maps.DirectionsTravelMode.WALKING,
+                        waypoints: [
+                            {
+                                location: waypoint
+                            },
+
+                        ]
                     };
                     DirectionsService.route(
                         directionsRequest,

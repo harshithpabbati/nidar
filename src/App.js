@@ -5,7 +5,7 @@ import MyMapComponent from './components/map';
 function App() {
   return (
     <div className="App">
-      <MyMapComponent from="changampuzha park" to="dream flower lyra" />
+      <MyMapComponent from="palarivattom" to="dream flower lyra" waypoint="changampuzha park" />
     </div>
   );
 }
