@@ -2,17 +2,50 @@
 import React from "react"
 import {compose, withProps, withHandlers, withState, lifecycle} from "recompose"
 import {withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer, Marker} from "react-google-maps"
+import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
 
 class MyMapComponent extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            latitude: '',
+            longitude: '',
+        };
+        this.getMyLocation = this.getMyLocation.bind(this)
+    }
+
+    getMyLocation() {
+        const location = window.navigator && window.navigator.geolocation;
+        if (location) {
+            location.getCurrentPosition((position) => {
+                this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                })
+            }, (error) => {
+                this.setState({ latitude: 'err-latitude', longitude: 'err-longitude' })
+            })
+        }
+    }
+    displaygeolocation = () => {
+        return (
+            <Marker key={this.state} position={{
+                lat: this.state.latitude,
+                lng: this.state.longitude,
+            }}
+            icon="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+            />
+        )
+    };
+    componentDidMount(){
+        this.getMyLocation();
     }
     render() {
         let from = this.props.from;
         let to = this.props.to;
         const Map = compose(
             withProps({
-                googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyCaK8qoLfQ8WW7M4XGe60O1_LpVrBE6yyk",
+                googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key=AIzaSyCaK8qoLfQ8WW7M4XGe60O1_LpVrBE6yyk",
                 loadingElement: <div style={{ height: `100%` }} />,
                 containerElement: <div style={{ height: `100vh` }} />,
                 mapElement: <div style={{ height: `100%` }} />,
@@ -66,20 +99,6 @@ class MyMapComponent extends React.Component{
                         origin: from,
                         destination: to,
                         travelMode: google.maps.DirectionsTravelMode.WALKING,
-                        waypoints: [
-                            {
-                                location: "Cafe CoffeeDay Mill, Mamangalam"
-                            },
-                            {
-                                location: "Sparkles Car Wash, BTS Road"
-                            },
-                            {
-                                location: "Bhavan's Vidya Mandir"
-                            },
-                            {
-                                location: "Punnakkel Temple"
-                            },
-                        ]
                     };
                     DirectionsService.route(
                         directionsRequest,
@@ -96,14 +115,19 @@ class MyMapComponent extends React.Component{
                 },
             })
         )((props) => {
+            const data = [];
+            props.bars && props.bars.map((bar) => {
+                data.push(new window.google.maps.LatLng(bar.geometry.location.lat(), bar.geometry.location.lng()))
+            });
             return (
                 <GoogleMap
                     onTilesLoaded={props.fetchPolice}
                     ref={props.onMapMounted}
                     onBoundsChanged={props.fetchPolice}
-                    defaultZoom={8}
+                    defaultZoom={11}
                     defaultCenter={{ lat: 51.508530, lng: -0.076132 }}
                 >
+                    <HeatmapLayer data={data} options={{radius: '50'}} />
                     {props.bars && props.bars.map((bar, i) =>
                         <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png" position={{ lat: bar.geometry.location.lat(), lng: bar.geometry.location.lng() }} />
                     )}
@@ -111,9 +135,10 @@ class MyMapComponent extends React.Component{
                         <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png" position={{ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }} />
                     )}
                     {props.directions && <DirectionsRenderer directions={props.directions} />}
+                    {this.displaygeolocation()}
                 </GoogleMap>
             )
-        })
+        });
         return <Map/>
     }
 }
