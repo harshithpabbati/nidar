@@ -10,10 +10,6 @@ class MyMapComponent extends React.Component{
     render() {
         let from = this.props.from;
         let to = this.props.to;
-        let request = {
-            query: 'Police Station',
-            fields: ['name', 'geometry'],
-        };
         const Map = compose(
             withProps({
                 googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyCaK8qoLfQ8WW7M4XGe60O1_LpVrBE6yyk",
@@ -24,6 +20,7 @@ class MyMapComponent extends React.Component{
             withScriptjs,
             withGoogleMap,
             withState('places', 'updatePlaces', ''),
+            withState('bars', 'updateBars', ''),
             withHandlers(() => {
                 const refs = {
                     map: undefined,
@@ -32,7 +29,7 @@ class MyMapComponent extends React.Component{
                     onMapMounted: () => ref => {
                         refs.map = ref
                     },
-                    fetchPolice: ({ updatePlaces }) => {
+                    fetchPolice: ({ updatePlaces, updateBars }) => {
                         let places;
                         const bounds = refs.map.getBounds();
                         const service = new google.maps.places.PlacesService(refs.map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED);
@@ -44,6 +41,18 @@ class MyMapComponent extends React.Component{
                             if (status === google.maps.places.PlacesServiceStatus.OK) {
                                 console.log(results);
                                 updatePlaces(results);
+                            }
+                        });
+                        let bars;
+                        const servicebar = new google.maps.places.PlacesService(refs.map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED);
+                        const requestbar = {
+                            bounds: bounds,
+                            type: ['bar']
+                        };
+                        servicebar.nearbySearch(requestbar, (results, status) => {
+                            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                console.log(results);
+                                updateBars(results);
                             }
                         })
                     },
@@ -95,6 +104,9 @@ class MyMapComponent extends React.Component{
                     defaultZoom={8}
                     defaultCenter={{ lat: 51.508530, lng: -0.076132 }}
                 >
+                    {props.bars && props.bars.map((bar, i) =>
+                        <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png" position={{ lat: bar.geometry.location.lat(), lng: bar.geometry.location.lng() }} />
+                    )}
                     {props.places && props.places.map((place, i) =>
                         <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png" position={{ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }} />
                     )}
