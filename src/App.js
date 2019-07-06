@@ -1,11 +1,12 @@
 import React from 'react';
 import './styles/style.sass';
-import MyMapComponent from './components/map';
+
+import Navigator from './components/navigator';
 
 function App() {
   return (
     <div className="App">
-      <MyMapComponent from="Changampuzha Park" to="Ramakkodam Lane" />
+        <Navigator />
     </div>
   );
 }

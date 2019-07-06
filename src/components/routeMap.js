@@ -4,11 +4,7 @@ import {compose, withProps, withHandlers, withState, lifecycle} from "recompose"
 import {withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer, Marker} from "react-google-maps"
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
 
-class MyMapComponent extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
+class RouteMap extends React.Component{
     render() {
         let from = this.props.from;
         let to = this.props.to;
@@ -21,7 +17,8 @@ class MyMapComponent extends React.Component{
             }),
             withScriptjs,
             withGoogleMap,
-            withState('places', 'updatePlaces', ''),
+            withState('policeStations', 'updatePoliceStations', []),
+            withState('hospitals', 'updateHospitals', ''),
             withState('bars', 'updateBars', ''),
             withHandlers(() => {
                 const refs = {
@@ -31,32 +28,33 @@ class MyMapComponent extends React.Component{
                     onMapMounted: () => ref => {
                         refs.map = ref
                     },
-                    fetchPolice: ({ updatePlaces, updateBars }) => {
-                        let places;
+                    fetchHeatMapData: ({ updatePoliceStations, updateHospitals, updateBars }) => {
                         const bounds = refs.map.getBounds();
                         const service = new google.maps.places.PlacesService(refs.map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED);
+
                         const request = {
                             bounds: bounds,
-                            type: ['police']
+                            radius: 5000,
                         };
-                        service.nearbySearch(request, (results, status) => {
+
+                        service.nearbySearch({...request, type: ["police"]}, (results, status) => {
                             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                                console.log(results);
-                                updatePlaces(results);
+                                updatePoliceStations(results);
                             }
                         });
-                        let bars;
-                        const servicebar = new google.maps.places.PlacesService(refs.map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED);
-                        const requestbar = {
-                            bounds: bounds,
-                            type: ['bar']
-                        };
-                        servicebar.nearbySearch(requestbar, (results, status) => {
+
+                        service.nearbySearch({...request, type: ["hospital"]}, (results, status) => {
                             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                                console.log(results);
+                                updateHospitals(results);
+                            }
+                        });
+
+                        service.nearbySearch({...request, type: ["bar"]}, (results, status) => {
+                            if (status === google.maps.places.PlacesServiceStatus.OK) {
                                 updateBars(results);
                             }
-                        })
+                        });
+
                     },
                 }
             }),
@@ -84,35 +82,34 @@ class MyMapComponent extends React.Component{
                 },
             })
         )((props) => {
-            const data = [];
-            props.bars && props.bars.map((bar) => {
-                data.push(new window.google.maps.LatLng(bar.geometry.location.lat(), bar.geometry.location.lng()))
-            });
             let options = {
                 mapTypeControl: false,
                 streetViewControl: false
             };
-            const gooddata = [];
-            props.places && props.places.map((place) => {
-                gooddata.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
+
+            const data = [];
+            props.bars && props.bars.map((bar) => {
+                data.push(new window.google.maps.LatLng(bar.geometry.location.lat(), bar.geometry.location.lng()))
             });
+
+            const positiveMarkers = [];
+            props.policeStations && props.policeStations.map((place) => {
+                positiveMarkers.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
+            });
+            props.hospitals && props.hospitals.map((place) => {
+                positiveMarkers.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
+            });
+
             return (
                 <GoogleMap
-                    onTilesLoaded={props.fetchPolice}
+                    onTilesLoaded={props.fetchHeatMapData}
                     ref={props.onMapMounted}
-                    onBoundsChanged={props.fetchPolice}
+                    onBoundsChanged={props.fetchHeatMapData}
                     defaultZoom={11}
-                    defaultCenter={{ lat: 51.508530, lng: -0.076132 }}
                     options={options}
                 >
-                    <HeatmapLayer data={data} options={{radius: 250, maxIntensity: 3, dissipating: false}} />
-                    <HeatmapLayer data={gooddata} options={{radius: 250, maxIntensity: 8, dissipating: false}} />
-                    {props.bars && props.bars.map((bar, i) =>
-                        <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png" position={{ lat: bar.geometry.location.lat(), lng: bar.geometry.location.lng() }} />
-                    )}
-                    {props.places && props.places.map((place, i) =>
-                        <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png" position={{ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }} />
-                    )}
+                    <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
+                    <HeatmapLayer data={positiveMarkers} options={{radius: 200, maxIntensity: 10}} />
                     {props.directions && <DirectionsRenderer directions={props.directions} />}
                 </GoogleMap>
             )
@@ -121,5 +118,5 @@ class MyMapComponent extends React.Component{
     }
 }
 
-export default MyMapComponent;
+export default RouteMap;
 
