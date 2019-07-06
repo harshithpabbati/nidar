@@ -3,8 +3,26 @@ import React from "react"
 import {compose, withProps, withHandlers, withState, lifecycle} from "recompose"
 import {withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer, Marker} from "react-google-maps"
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
+import dataFetch from '../utils/dataFetch';
+
+
 
 class RouteMap extends React.Component{
+
+    fetchAPIData = async () => {
+        const query = `
+                            {
+                              darkIncident{
+                                latitude
+                                longitude
+                              }                   
+                            }
+                        `;
+        const response =  await dataFetch({ query });
+        if (!Object.prototype.hasOwnProperty.call(response, 'errors')) {
+           return response;
+        }
+    };
     render() {
         let from = this.props.from;
         let to = this.props.to;
@@ -17,6 +35,7 @@ class RouteMap extends React.Component{
             }),
             withScriptjs,
             withGoogleMap,
+            withState('darkIncidents', 'updateDarkIncidents', []),
             withState('policeStations', 'updatePoliceStations', []),
             withState('hospitals', 'updateHospitals', ''),
             withState('bars', 'updateBars', ''),
@@ -28,7 +47,10 @@ class RouteMap extends React.Component{
                     onMapMounted: () => ref => {
                         refs.map = ref
                     },
-                    fetchHeatMapData: ({ updatePoliceStations, updateHospitals, updateBars }) => {
+                    fetchHeatMapData: async ({ updateDarkIncidents, updatePoliceStations, updateHospitals, updateBars }) => {
+                        const data = await this.fetchAPIData();
+                        updateDarkIncidents(data.data.darkIncident);
+
                         const bounds = refs.map.getBounds();
                         const service = new google.maps.places.PlacesService(refs.map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED);
 
@@ -54,7 +76,6 @@ class RouteMap extends React.Component{
                                 updateBars(results);
                             }
                         });
-
                     },
                 }
             }),
@@ -73,7 +94,6 @@ class RouteMap extends React.Component{
                         (result, status) => {
                             if (status === google.maps.DirectionsStatus.OK) {
                                 const distance = result.routes[0].legs[0].distance.value*0.001;
-                                alert(distance + 'km' );
                                 this.setState({
                                     distance,
                                     directions: result
@@ -105,20 +125,29 @@ class RouteMap extends React.Component{
             props.hospitals && props.hospitals.map((place) => {
                 positiveMarkers.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
             });
-            console.log(props.distance);
+
+
             return (
                 props.distance < 9 ?
-                    <GoogleMap
-                        onTilesLoaded={props.fetchHeatMapData}
-                        ref={props.onMapMounted}
-                        onBoundsChanged={props.fetchHeatMapData}
-                        defaultZoom={11}
-                        options={options}
-                    >
-                        <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
-                        <HeatmapLayer data={positiveMarkers} options={{radius: 200, maxIntensity: 10}} />
-                        {props.directions && <DirectionsRenderer directions={props.directions} />}
-                    </GoogleMap>: null
+                    <>
+                        <GoogleMap
+                            onTilesLoaded={props.fetchHeatMapData}
+                            ref={props.onMapMounted}
+                            onBoundsChanged={props.fetchHeatMapData}
+                            defaultZoom={11}
+                            options={options}
+                        >
+                            <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
+                            <HeatmapLayer data={positiveMarkers} options={{radius: 200, maxIntensity: 10}} />
+                            {props.darkIncidents && props.darkIncidents.map((place, i) => (
+                                    <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                            position={{lat: Number(place.latitude), lng: Number(place.longitude)}}/>
+                                )
+                            )}
+                            {props.directions && <DirectionsRenderer directions={props.directions} />}
+                        </GoogleMap>
+                        </>
+                        : null
             )
         });
         return <Map/>
