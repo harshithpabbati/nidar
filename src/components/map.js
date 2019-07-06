@@ -1,59 +1,80 @@
-import React from 'react';
-import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+/*global google*/
+import React from "react"
+import { compose, withProps, withHandlers, withState, lifecycle } from "recompose"
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, DirectionsRenderer } from "react-google-maps"
 
-const mapStyles = {
-    width: '100%',
-    height: '100%',
-};
-export class MapContainer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            latitude: '',
-            longitude: '',
+const Map = compose(
+    withProps({
+        googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyCaK8qoLfQ8WW7M4XGe60O1_LpVrBE6yyk",
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `100vh` }} />,
+        mapElement: <div style={{ height: `100%` }} />,
+    }),
+    withScriptjs,
+    withGoogleMap,
+    withState('places', 'updatePlaces', ''),
+    withHandlers(() => {
+        const refs = {
+            map: undefined,
         };
-        this.getMyLocation = this.getMyLocation.bind(this)
-    }
-
-    componentDidMount() {
-        this.getMyLocation()
-    }
-
-    getMyLocation() {
-        const location = window.navigator && window.navigator.geolocation;
-
-        if (location) {
-            location.getCurrentPosition((position) => {
-                this.setState({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
+        return {
+            onMapMounted: () => ref => {
+                refs.map = ref
+            },
+            fetchPlaces: ({ updatePlaces }) => {
+                let places;
+                const bounds = refs.map.getBounds();
+                const service = new google.maps.places.PlacesService(refs.map.context);
+                const request = {
+                    bounds: bounds,
+                    type: ['hotel']
+                };
+                service.nearbySearch(request, (results, status) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        console.log(results);
+                        updatePlaces(results);
+                    }
                 })
-            }, (error) => {
-                this.setState({ latitude: 'err-latitude', longitude: 'err-longitude' })
-            })
+            }
         }
-    }
+    }),
+    lifecycle({
+        componentDidMount() {
+            const DirectionsService = new google.maps.DirectionsService();
+            DirectionsService.route(
+                {
+                    origin: new google.maps.LatLng(41.85073, -87.65126),
+                    destination: new google.maps.LatLng(41.85258, -87.65141),
+                    travelMode: google.maps.TravelMode.DRIVING
+                },
+                (result, status) => {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        this.setState({
+                            directions: result
+                        });
+                    } else {
+                        console.error(`error fetching directions ${result}`);
+                    }
+                }
+            );
+        },
+    })
+)((props) => {
+    return (
+        <GoogleMap
+            onTilesLoaded={props.fetchPlaces}
+            ref={props.onMapMounted}
+            onBoundsChanged={props.fetchPlaces}
+            defaultZoom={8}
+            defaultCenter={{ lat: 51.508530, lng: -0.076132 }}
+        >
+            {props.directions && <DirectionsRenderer directions={props.directions} />}
+            {/*{props.places && props.places.map((place, i) =>*/}
+            {/*    <Marker key={i} position={{ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }} />*/}
+            {/*)}*/}
+        </GoogleMap>
+    )
+});
 
-    display = () => {
-        return <Marker key={this.state.latitude} position={{
-            lat: this.state.latitude,
-            lng: this.state.longitude,
-        }}/>
-    };
-    render() {
-        return (
-            <Map
-                google={this.props.google}
-                zoom={8}
-                style={mapStyles}
-                initialCenter={{ lat: this.state.latitude, lng: this.state.longitude}}
-            >
-                {this.display()}
-            </Map>
-        );
-    }
-}
+export default Map;
 
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyCaK8qoLfQ8WW7M4XGe60O1_LpVrBE6yyk'
-})(MapContainer);

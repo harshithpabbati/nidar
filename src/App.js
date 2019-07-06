@@ -1,11 +1,11 @@
 import React from 'react';
 import './styles/style.sass';
-import MapContainer from "./components/map";
+import Map from './components/map';
 
 function App() {
   return (
     <div className="App">
-      <MapContainer/>
+      <Map/>
     </div>
   );
 }
