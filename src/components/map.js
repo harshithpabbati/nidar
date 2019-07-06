@@ -119,6 +119,10 @@ class MyMapComponent extends React.Component{
             props.bars && props.bars.map((bar) => {
                 data.push(new window.google.maps.LatLng(bar.geometry.location.lat(), bar.geometry.location.lng()))
             });
+            let options = {
+                mapTypeControl: false,
+                streetViewControl: false
+            };
             return (
                 <GoogleMap
                     onTilesLoaded={props.fetchPolice}
@@ -126,6 +130,7 @@ class MyMapComponent extends React.Component{
                     onBoundsChanged={props.fetchPolice}
                     defaultZoom={11}
                     defaultCenter={{ lat: 51.508530, lng: -0.076132 }}
+                    options={options}
                 >
                     <HeatmapLayer data={data} options={{radius: '50'}} />
                     {props.bars && props.bars.map((bar, i) =>
