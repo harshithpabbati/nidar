@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="214c4710-9977-4343-a328-0d794e483366" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/navigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/navigator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/routeMap.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/routeMap.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -34,14 +35,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/navigator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="1134">
+              <caret line="54" column="10" lean-forward="true" selection-start-line="54" selection-start-column="10" selection-end-line="54" selection-end-column="10" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -64,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/routeMap.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="54" selection-start-line="54" selection-end-line="54" />
+            <state relative-caret-position="160">
+              <caret line="88" column="39" lean-forward="true" selection-start-line="88" selection-start-column="39" selection-end-line="88" selection-end-column="39" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#18#43#0" expanded="true" />
@@ -104,8 +114,9 @@
         <option value="$PROJECT_DIR$/src/App.js" />
         <option value="$PROJECT_DIR$/src/components/map.js" />
         <option value="$PROJECT_DIR$/src/styles/navigator.sass" />
-        <option value="$PROJECT_DIR$/src/components/routeMap.js" />
         <option value="$PROJECT_DIR$/src/components/navigator.js" />
+        <option value="$PROJECT_DIR$/public/index.html" />
+        <option value="$PROJECT_DIR$/src/components/routeMap.js" />
       </list>
     </option>
   </component>
@@ -127,6 +138,11 @@
             <path>
               <item name="nidar" type="b2602c69:ProjectViewProjectNode" />
               <item name="nidar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nidar" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nidar" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="nidar" type="b2602c69:ProjectViewProjectNode" />
@@ -186,7 +202,7 @@
       <option name="presentableId" value="Default" />
       <updated>1562386121207</updated>
       <workItem from="1562386122492" duration="587000" />
-      <workItem from="1562434846111" duration="8403000" />
+      <workItem from="1562434846111" duration="9528000" />
     </task>
     <task id="LOCAL-00001" summary="Add Support for Custom Destinations">
       <created>1562442736617</created>
@@ -195,17 +211,31 @@
       <option name="project" value="LOCAL" />
       <updated>1562442736617</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Support for Updating Source, defaulting to gps">
+      <created>1562443356129</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1562443356129</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fix bug in source selection">
+      <created>1562443903048</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1562443903048</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8990000" />
+    <option name="totallyTimeSpent" value="10115000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24986821" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24986821" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -219,7 +249,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32993197" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32993197" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -230,7 +260,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add Support for Custom Destinations" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Support for Custom Destinations" />
+    <MESSAGE value="Support for Updating Source, defaulting to gps" />
+    <MESSAGE value="Fix bug in source selection" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix bug in source selection" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/styles/style.sass">
@@ -261,17 +293,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/routeMap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="54" selection-start-line="54" selection-end-line="54" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#18#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21">
@@ -281,10 +302,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/navigator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="1134">
+          <caret line="54" column="10" lean-forward="true" selection-start-line="54" selection-start-column="10" selection-end-line="54" selection-end-column="10" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/routeMap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="88" column="39" lean-forward="true" selection-start-line="88" selection-start-column="39" selection-end-line="88" selection-end-column="39" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#18#43#0" expanded="true" />
           </folding>
         </state>
       </provider>

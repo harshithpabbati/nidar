@@ -85,7 +85,9 @@ class RouteMap extends React.Component{
         )((props) => {
             let options = {
                 mapTypeControl: false,
-                streetViewControl: false
+                streetViewControl: false,
+                gestureHandling: false,
+                zoomControl: false
             };
 
             const data = [];
