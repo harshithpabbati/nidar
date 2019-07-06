@@ -16,12 +16,11 @@
     "react-dom": "^16.8.6",
     "react-grid": "^2.0.12",
     "react-helmet": "^5.2.0",
-    "react-map-gl": "^5.0.3",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
-    "react-star-rating-component": "^1.4.1",
     "semantic-ui-react": "^0.87.1",
+    "google-maps-react": "^2.0.2",
     "styled-components": "^4.2.0",
     "universal-cookie": "^3.1.0"
   },
