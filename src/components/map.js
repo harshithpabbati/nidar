@@ -7,39 +7,8 @@ import HeatmapLayer from "react-google-maps/lib/components/visualization/Heatmap
 class MyMapComponent extends React.Component{
     constructor(props){
         super(props);
-        this.state = {
-            latitude: '',
-            longitude: '',
-        };
-        this.getMyLocation = this.getMyLocation.bind(this)
     }
 
-    getMyLocation() {
-        const location = window.navigator && window.navigator.geolocation;
-        if (location) {
-            location.getCurrentPosition((position) => {
-                this.setState({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                })
-            }, (error) => {
-                this.setState({ latitude: 'err-latitude', longitude: 'err-longitude' })
-            })
-        }
-    }
-    displaygeolocation = () => {
-        return (
-            <Marker key={this.state} position={{
-                lat: this.state.latitude,
-                lng: this.state.longitude,
-            }}
-            icon="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-            />
-        )
-    };
-    componentDidMount(){
-        this.getMyLocation();
-    }
     render() {
         let from = this.props.from;
         let to = this.props.to;
@@ -123,6 +92,10 @@ class MyMapComponent extends React.Component{
                 mapTypeControl: false,
                 streetViewControl: false
             };
+            const gooddata = [];
+            props.places && props.places.map((place) => {
+                gooddata.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
+            });
             return (
                 <GoogleMap
                     onTilesLoaded={props.fetchPolice}
@@ -132,7 +105,8 @@ class MyMapComponent extends React.Component{
                     defaultCenter={{ lat: 51.508530, lng: -0.076132 }}
                     options={options}
                 >
-                    <HeatmapLayer data={data} options={{radius: '50'}} />
+                    <HeatmapLayer data={data} options={{radius: 250, maxIntensity: 3, dissipating: false}} />
+                    <HeatmapLayer data={gooddata} options={{radius: 250, maxIntensity: 8, dissipating: false}} />
                     {props.bars && props.bars.map((bar, i) =>
                         <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png" position={{ lat: bar.geometry.location.lat(), lng: bar.geometry.location.lng() }} />
                     )}
@@ -140,7 +114,6 @@ class MyMapComponent extends React.Component{
                         <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png" position={{ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }} />
                     )}
                     {props.directions && <DirectionsRenderer directions={props.directions} />}
-                    {this.displaygeolocation()}
                 </GoogleMap>
             )
         });
