@@ -72,7 +72,10 @@ class RouteMap extends React.Component{
                         directionsRequest,
                         (result, status) => {
                             if (status === google.maps.DirectionsStatus.OK) {
+                                const distance = result.routes[0].legs[0].distance.value*0.001;
+                                alert(distance + 'km' );
                                 this.setState({
+                                    distance,
                                     directions: result
                                 });
                             } else {
@@ -102,19 +105,20 @@ class RouteMap extends React.Component{
             props.hospitals && props.hospitals.map((place) => {
                 positiveMarkers.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
             });
-
+            console.log(props.distance);
             return (
-                <GoogleMap
-                    onTilesLoaded={props.fetchHeatMapData}
-                    ref={props.onMapMounted}
-                    onBoundsChanged={props.fetchHeatMapData}
-                    defaultZoom={11}
-                    options={options}
-                >
-                    <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
-                    <HeatmapLayer data={positiveMarkers} options={{radius: 200, maxIntensity: 10}} />
-                    {props.directions && <DirectionsRenderer directions={props.directions} />}
-                </GoogleMap>
+                props.distance < 9 ?
+                    <GoogleMap
+                        onTilesLoaded={props.fetchHeatMapData}
+                        ref={props.onMapMounted}
+                        onBoundsChanged={props.fetchHeatMapData}
+                        defaultZoom={11}
+                        options={options}
+                    >
+                        <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
+                        <HeatmapLayer data={positiveMarkers} options={{radius: 200, maxIntensity: 10}} />
+                        {props.directions && <DirectionsRenderer directions={props.directions} />}
+                    </GoogleMap>: null
             )
         });
         return <Map/>
