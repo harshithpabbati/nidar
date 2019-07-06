@@ -66,6 +66,7 @@ class RouteMap extends React.Component{
                         origin: from,
                         destination: to,
                         travelMode: google.maps.DirectionsTravelMode.WALKING,
+                        provideRouteAlternatives: true
                     };
                     DirectionsService.route(
                         directionsRequest,

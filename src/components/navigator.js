@@ -42,7 +42,11 @@ class Navigator extends React.Component {
 
     handleSearch(){
         const destination = this.destination.value;
-        const source = this.source.value;
+        let source = "";
+        if(this.source.value!=='')
+            source = this.source.value;
+        else
+            source = this.state.source;
 
         this.setState({
             search: true,
@@ -56,7 +60,7 @@ class Navigator extends React.Component {
         return (
             <div>
                 <div id="searchbox">
-                    <input value={this.state.source}
+                    <input placeholder={this.state.source}
                         ref={(from) => this.source = from}
                     />
                     <input
