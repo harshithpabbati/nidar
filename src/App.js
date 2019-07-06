@@ -1,11 +1,11 @@
 import React from 'react';
 import './styles/style.sass';
-import Map from './components/map';
+import MyMapComponent from './components/map';
 
 function App() {
   return (
     <div className="App">
-      <Map/>
+      <MyMapComponent from="changampuzha park" to="dream flower lyra" />
     </div>
   );
 }
