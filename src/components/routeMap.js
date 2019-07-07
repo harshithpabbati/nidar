@@ -21,6 +21,34 @@ class RouteMap extends React.Component{
            return response;
         }
     };
+    fetchStalkData = async () => {
+        const query = `
+                            {
+                              stalkerIncident{
+                                latitude
+                                longitude
+                              }                   
+                            }
+                        `;
+        const response =  await dataFetch({ query });
+        if (!Object.prototype.hasOwnProperty.call(response, 'errors')) {
+            return response;
+        }
+    };
+    fetchCatcallData = async () => {
+        const query = `
+                            {
+                              catCallIncident{
+                                latitude
+                                longitude
+                              }                   
+                            }
+                        `;
+        const response =  await dataFetch({ query });
+        if (!Object.prototype.hasOwnProperty.call(response, 'errors')) {
+            return response;
+        }
+    };
     render() {
         let from = this.props.from;
         let to = this.props.to;
@@ -33,6 +61,8 @@ class RouteMap extends React.Component{
             }),
             withScriptjs,
             withGoogleMap,
+            withState('catcallIncidents', 'updateCatcallIncidents', []),
+            withState('stalkIncidents', 'updateStalkIncidents', []),
             withState('darkIncidents', 'updateDarkIncidents', []),
             withState('policeStations', 'updatePoliceStations', []),
             withState('hospitals', 'updateHospitals', ''),
@@ -45,9 +75,15 @@ class RouteMap extends React.Component{
                     onMapMounted: () => ref => {
                         refs.map = ref
                     },
-                    fetchHeatMapData: async ({ updateDarkIncidents, updatePoliceStations, updateHospitals, updateBars }) => {
+                    fetchHeatMapData: async ({ updateCatcallIncidents, updateStalkIncidents, updateDarkIncidents, updatePoliceStations, updateHospitals, updateBars }) => {
                         const data = await this.fetchAPIData();
                         updateDarkIncidents(data.data.darkIncident);
+
+                        const stalkdata = await this.fetchStalkData();
+                        updateStalkIncidents(stalkdata.data.stalkerIncident);
+
+                        const catcalldata = await this.fetchCatcallData();
+                        updateCatcallIncidents(catcalldata.data.catCallIncident);
 
                         const bounds = refs.map.getBounds();
                         const service = new google.maps.places.PlacesService(refs.map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED);
@@ -142,6 +178,16 @@ class RouteMap extends React.Component{
                             <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
                             <HeatmapLayer data={positiveMarkers} options={{radius: 200, maxIntensity: 10}} />
                             {props.darkIncidents && props.darkIncidents.map((place, i) => (
+                                    <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                            position={{lat: Number(place.latitude), lng: Number(place.longitude)}}/>
+                                )
+                            )}
+                            {props.catcallIncidents && props.catcallIncidents.map((place, i) => (
+                                    <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                            position={{lat: Number(place.latitude), lng: Number(place.longitude)}}/>
+                                )
+                            )}
+                            {props.stalkIncidents && props.stalkIncidents.map((place, i) => (
                                     <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
                                             position={{lat: Number(place.latitude), lng: Number(place.longitude)}}/>
                                 )
