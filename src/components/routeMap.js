@@ -133,7 +133,7 @@ class RouteMap extends React.Component{
                             onTilesLoaded={props.fetchHeatMapData}
                             ref={props.onMapMounted}
                             onBoundsChanged={props.fetchHeatMapData}
-                            zoom={25}
+                            zoom={1}
                             options={options}
                         >
                             <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
