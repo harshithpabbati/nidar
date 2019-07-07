@@ -5,8 +5,6 @@ import {withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer, Marker} from
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
 import dataFetch from '../utils/dataFetch';
 
-
-
 class RouteMap extends React.Component{
 
     fetchAPIData = async () => {
@@ -135,7 +133,7 @@ class RouteMap extends React.Component{
                             onTilesLoaded={props.fetchHeatMapData}
                             ref={props.onMapMounted}
                             onBoundsChanged={props.fetchHeatMapData}
-                            defaultZoom={13}
+                            zoom={25}
                             options={options}
                         >
                             <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
