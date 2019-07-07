@@ -110,7 +110,8 @@ class RouteMap extends React.Component{
                 mapTypeControl: false,
                 streetViewControl: false,
                 gestureHandling: false,
-                zoomControl: false
+                zoomControl: false,
+                fullscreenControl: false
             };
 
             const data = [];
@@ -134,7 +135,7 @@ class RouteMap extends React.Component{
                             onTilesLoaded={props.fetchHeatMapData}
                             ref={props.onMapMounted}
                             onBoundsChanged={props.fetchHeatMapData}
-                            defaultZoom={11}
+                            defaultZoom={13}
                             options={options}
                         >
                             <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />

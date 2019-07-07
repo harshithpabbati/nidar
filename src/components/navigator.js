@@ -1,6 +1,8 @@
 import React from "react"
 import RouteMap from "./routeMap";
 
+import { Row, Col} from "srx";
+
 import '../styles/navigator.sass';
 
 
@@ -56,24 +58,30 @@ class Navigator extends React.Component {
     }
 
     render(){
-        console.log(this.state.searchTerm);
         return (
-            <div>
-                <div id="searchbox">
-                    <input placeholder={this.state.source}
-                        ref={(from) => this.source = from}
-                    />
-                    <input
-                        ref={(destination) => this.destination = destination}
-                    />
-                    <button onClick={this.handleSearch}>Search</button>
-                </div>
-                {
-                    this.state.search ?
-                    <RouteMap from={this.state.source} to={this.state.destination} /> :
-                        <div style={{ height: `100vh`, background: "#111" }} />
-                }
-            </div>
+        <>
+            <Row id="header">
+                <Col width={[12,4,3]} style={{ textAlign: "center"}} p={0} m={0}>
+                    <h1 style={{ paddingBottom: "1rem", margin: 0}}>Nidar</h1>
+                </Col>
+                <Col width={[12,8,9]}>
+                    <div id="searchbox">
+                        <input placeholder="My Current GPS Location"
+                            ref={(from) => this.source = from}
+                        />
+                        <input
+                            ref={(destination) => this.destination = destination}
+                        />
+                        <button onClick={this.handleSearch}>Start</button>
+                    </div>
+                </Col>
+            </Row>
+            {
+                this.state.search ?
+                <RouteMap from={this.state.source} to={this.state.destination} /> :
+                    <div style={{ height: `100vh`, background: "#111" }} />
+            }
+        </>
         )
     }
 }

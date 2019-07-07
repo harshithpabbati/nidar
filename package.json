@@ -24,6 +24,7 @@
     "recompose": "^0.30.0",
     "save": "^2.4.0",
     "semantic-ui-react": "^0.87.1",
+    "srx": "0.0.4",
     "styled-components": "^4.2.0",
     "universal-cookie": "^3.1.0"
   },
