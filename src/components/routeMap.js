@@ -113,14 +113,17 @@ class RouteMap extends React.Component{
             };
 
             const data = [];
+            // eslint-disable-next-line array-callback-return
             props.bars && props.bars.map((bar) => {
                 data.push(new window.google.maps.LatLng(bar.geometry.location.lat(), bar.geometry.location.lng()))
             });
 
             const positiveMarkers = [];
+            // eslint-disable-next-line array-callback-return
             props.policeStations && props.policeStations.map((place) => {
                 positiveMarkers.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
             });
+            // eslint-disable-next-line array-callback-return
             props.hospitals && props.hospitals.map((place) => {
                 positiveMarkers.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
             });
@@ -133,7 +136,7 @@ class RouteMap extends React.Component{
                             onTilesLoaded={props.fetchHeatMapData}
                             ref={props.onMapMounted}
                             onBoundsChanged={props.fetchHeatMapData}
-                            zoom={1}
+                            zoom={10}
                             options={options}
                         >
                             <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
