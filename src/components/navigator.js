@@ -14,6 +14,8 @@ class Navigator extends React.Component {
             source: '',
             latitude: '',
             longitude: '',
+            distance: 0,
+            distanceSet: false,
             search: false,
         };
 
@@ -59,26 +61,37 @@ class Navigator extends React.Component {
     render(){
         return (
         <>
-            <div id="header" m={0} className={className(this.state.search ? 'loaded' : null)}>
+            <div id="header" className={className(this.state.search ? 'loaded' : null)}>
                 {
                     !this.state.search ?
-                        <div className="title">Start a Trip</div>
-                        : null
+                        <>
+                            <div className="title">Start a Trip</div>
+                            <div id="searchbox">
+                                <input placeholder="Your Location"
+                                    ref={(from) => this.source = from}
+                                />
+                                <input
+                                    placeholder="Choose Destination"
+                                    ref={(destination) => this.destination = destination}
+                                />
+                                <button onClick={this.handleSearch}>Start</button>
+                            </div>
+                        </> :
+                        <div className="d-flex">
+                            <div style={{ width: "10%"}}><i className="fa fa-arrow-left" /></div>
+                            <div style={{width: "90%"}}>
+                                {this.state.distance.toPrecision(2)} KM to your destination
+                            </div>
+                        </div>
                 }
-                <div id="searchbox">
-                    <input placeholder="Your Location"
-                        ref={(from) => this.source = from}
-                    />
-                    <input
-                        placeholder="Choose Destination"
-                        ref={(destination) => this.destination = destination}
-                    />
-                    <button onClick={this.handleSearch}>Start</button>
-                </div>
             </div>
             {
                 this.state.search ?
-                <RouteMap from={this.state.source} to={this.state.destination} /> : null
+                <RouteMap
+                    from={this.state.source}
+                    to={this.state.destination}
+                    distance={(d)=> !this.state.distanceSet ? this.setState({distance: d, distanceSet: true}) : null }
+                /> : null
             }
         </>
         )

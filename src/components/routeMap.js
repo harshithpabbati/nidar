@@ -24,6 +24,7 @@ class RouteMap extends React.Component{
     render() {
         let from = this.props.from;
         let to = this.props.to;
+        let distanceFunction = this.props.distance;
         const Map = compose(
             withProps({
                 googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key=AIzaSyCaK8qoLfQ8WW7M4XGe60O1_LpVrBE6yyk",
@@ -92,6 +93,7 @@ class RouteMap extends React.Component{
                         (result, status) => {
                             if (status === google.maps.DirectionsStatus.OK) {
                                 const distance = result.routes[0].legs[0].distance.value*0.001;
+                                distanceFunction(distance);
                                 this.setState({
                                     distance,
                                     directions: result
@@ -124,7 +126,6 @@ class RouteMap extends React.Component{
             props.hospitals && props.hospitals.map((place) => {
                 positiveMarkers.push(new window.google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()))
             });
-
 
             return (
                 props.distance < 9 ?
