@@ -79,8 +79,8 @@ class Navigator extends React.Component {
                                 </div>
                             </div>
                         </> :
-                        <div className="d-flex">
-                            <i className="fa fa-arrow-left pr-2" />
+                        <div className="d-flex align-items-center">
+                            <i onClick={()=> this.setState({search: false})} className="fa fa-arrow-left pr-2" />
                             {this.state.distance.toPrecision(2)} KM to your destination
                         </div>
                 }
