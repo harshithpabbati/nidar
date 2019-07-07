@@ -1,5 +1,7 @@
 #header
-  background: #4A148C
+  background: linear-gradient(213deg, #8230e1, #308ae1, #aa0972, #e13075)
+  background-size: 800% 800%
+  animation: NavigatorBgAnimation 21s ease infinite
   color: white
   padding: 1rem
   height: 100vh
@@ -12,6 +14,8 @@
     font-size: calc(1.5rem + 8vmax)
     padding: 3vh 0
     display: block
+    line-height: 1
+    margin-bottom: 5vh
 .loaded
   height: auto!important
   width: 100%
@@ -19,16 +23,27 @@
 #searchbox
   padding: 0.1rem
   width: 100%
+  text-align: center
   input
-    width: 90%
-    padding: 0.3rem
+    width: 100%
+    padding: 0.8rem
     margin: 0.3rem 0
     font-size: 1rem
+    border-radius: 0.8rem
+    border: none
   button
-    display: block
     margin: 0.3rem 0
-    width: 90%
-    padding: 0.5rem
+    width: 100%
+    padding: 0.8rem
     background: white
     border: none
     font-size: 1rem
+    border-radius: 1rem
+
+@keyframes NavigatorBgAnimation
+  0%
+    background-position: 0% 90%
+  50%
+    background-position: 100% 11%
+  100%
+    background-position: 0% 90%

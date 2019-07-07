@@ -66,22 +66,22 @@ class Navigator extends React.Component {
                     !this.state.search ?
                         <>
                             <div className="title">Start a Trip</div>
-                            <div id="searchbox">
-                                <input placeholder="Your Location"
-                                    ref={(from) => this.source = from}
-                                />
-                                <input
-                                    placeholder="Choose Destination"
-                                    ref={(destination) => this.destination = destination}
-                                />
-                                <button onClick={this.handleSearch}>Start</button>
+                            <div className="col-lg-3 col-md-6 col-12">
+                                <div id="searchbox">
+                                    <input placeholder="Your Location"
+                                        ref={(from) => this.source = from}
+                                    />
+                                    <input
+                                        placeholder="Choose Destination"
+                                        ref={(destination) => this.destination = destination}
+                                    />
+                                    <button onClick={this.handleSearch}>Start</button>
+                                </div>
                             </div>
                         </> :
                         <div className="d-flex">
-                            <div style={{ width: "5%"}}><i className="fa fa-arrow-left" /></div>
-                            <div style={{width: "95%"}}>
-                                {this.state.distance.toPrecision(2)} KM to your destination
-                            </div>
+                            <i className="fa fa-arrow-left pr-2" />
+                            {this.state.distance.toPrecision(2)} KM to your destination
                         </div>
                 }
             </div>

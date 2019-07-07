@@ -5,17 +5,21 @@ import {withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer, Marker} from
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
 import dataFetch from '../utils/dataFetch';
 
+import catCallImage from '../images/catcall.png';
+import stalkersImage from '../images/stalkers.png';
+import darkImage from '../images/thief.png';
+
 class RouteMap extends React.Component{
 
     fetchAPIData = async () => {
         const query = `
-                            {
-                              darkIncident{
-                                latitude
-                                longitude
-                              }                   
-                            }
-                        `;
+            {
+              darkIncident{
+                latitude
+                longitude
+              }                   
+            }
+        `;
         const response =  await dataFetch({ query });
         if (!Object.prototype.hasOwnProperty.call(response, 'errors')) {
            return response;
@@ -23,13 +27,13 @@ class RouteMap extends React.Component{
     };
     fetchStalkData = async () => {
         const query = `
-                            {
-                              stalkerIncident{
-                                latitude
-                                longitude
-                              }                   
-                            }
-                        `;
+            {
+              stalkerIncident{
+                latitude
+                longitude
+              }                   
+            }
+        `;
         const response =  await dataFetch({ query });
         if (!Object.prototype.hasOwnProperty.call(response, 'errors')) {
             return response;
@@ -37,13 +41,13 @@ class RouteMap extends React.Component{
     };
     fetchCatcallData = async () => {
         const query = `
-                            {
-                              catCallIncident{
-                                latitude
-                                longitude
-                              }                   
-                            }
-                        `;
+            {
+              catCallIncident{
+                latitude
+                longitude
+              }                   
+            }
+        `;
         const response =  await dataFetch({ query });
         if (!Object.prototype.hasOwnProperty.call(response, 'errors')) {
             return response;
@@ -179,17 +183,17 @@ class RouteMap extends React.Component{
                             <HeatmapLayer data={data} options={{radius: 150, maxIntensity: 5}} />
                             <HeatmapLayer data={positiveMarkers} options={{radius: 200, maxIntensity: 10}} />
                             {props.darkIncidents && props.darkIncidents.map((place, i) => (
-                                    <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                    <Marker key={i} icon={darkImage}
                                             position={{lat: Number(place.latitude), lng: Number(place.longitude)}}/>
                                 )
                             )}
                             {props.catcallIncidents && props.catcallIncidents.map((place, i) => (
-                                    <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                    <Marker key={i} icon={catCallImage}
                                             position={{lat: Number(place.latitude), lng: Number(place.longitude)}}/>
                                 )
                             )}
                             {props.stalkIncidents && props.stalkIncidents.map((place, i) => (
-                                    <Marker key={i} icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                    <Marker key={i} icon={stalkersImage}
                                             position={{lat: Number(place.latitude), lng: Number(place.longitude)}}/>
                                 )
                             )}
