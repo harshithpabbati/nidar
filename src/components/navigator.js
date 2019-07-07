@@ -78,8 +78,8 @@ class Navigator extends React.Component {
                             </div>
                         </> :
                         <div className="d-flex">
-                            <div style={{ width: "10%"}}><i className="fa fa-arrow-left" /></div>
-                            <div style={{width: "90%"}}>
+                            <div style={{ width: "5%"}}><i className="fa fa-arrow-left" /></div>
+                            <div style={{width: "95%"}}>
                                 {this.state.distance.toPrecision(2)} KM to your destination
                             </div>
                         </div>
